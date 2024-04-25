@@ -30,7 +30,8 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screenshot.jpg)
+![image](https://github.com/franclobo/advice_generator/assets/58642949/46f11ad5-39d9-4445-ae73-61f95139a323)
+
 
 ### Links
 
