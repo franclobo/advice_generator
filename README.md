@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frontend Mentor - Advice generator app solution
 
-## Getting Started
+This is a solution to the [Advice generator app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/advice-generator-app-QdUG-13db). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
-First, run the development server:
+## Table of contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Frontend Mentor - Advice generator app solution](#frontend-mentor---advice-generator-app-solution)
+  - [Table of contents](#table-of-contents)
+  - [Overview](#overview)
+    - [The challenge](#the-challenge)
+    - [Screenshot](#screenshot)
+    - [Links](#links)
+  - [My process](#my-process)
+    - [Built with](#built-with)
+    - [What I learned](#what-i-learned)
+    - [Continued development](#continued-development)
+    - [Useful resources](#useful-resources)
+  - [Author](#author)
+  - [Acknowledgments](#acknowledgments)
+
+## Overview
+
+### The challenge
+
+Users should be able to:
+
+- View the optimal layout for the app depending on their device's screen size
+- See hover states for all interactive elements on the page
+- Generate a new piece of advice by clicking the dice icon
+
+### Screenshot
+
+![](./screenshot.jpg)
+
+### Links
+
+- Solution URL: [Add solution URL here](https://your-solution-url.com)
+- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+
+## My process
+
+### Built with
+
+- Semantic HTML5 markup
+- CSS custom properties
+- Flexbox
+- CSS Grid
+- Mobile-first workflow
+- [Redux toolkit](https://redux.js.org/usage/nextjs) - API fetching
+- [Next.js](https://nextjs.org/) - React framework
+- [Styled Components](https://styled-components.com/) - For styles
+
+### What I learned
+
+```js
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import type { RootState } from '@/lib/store';
+
+export interface AdviceResponse {
+  id: number;
+  advice: string;
+}
+
+export const fetchAdvice = createAsyncThunk(
+  'advice/fetchAdvice',
+  async () => {
+    const response = await fetch('https://api.adviceslip.com/advice');
+    const data = await response.json();
+    return data.slip as AdviceResponse;
+  }
+);
+
+export interface AdviceState {
+  value: string;
+  id: number;
+}
+
+const initialState: AdviceState = {
+  value: '',
+  id: 0,
+};
+
+export const adviceSlice = createSlice({
+  name: 'advice',
+  initialState,
+  reducers: {
+    setValueAndId: (state, action: PayloadAction<AdviceState>) => {
+      state.value = action.payload.value;
+      state.id = action.payload.id;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchAdvice.fulfilled, (state, action) => {
+      state.value = action.payload.advice;
+      state.id = action.payload.id;
+    });
+  }
+});
+
+export const { setValueAndId } = adviceSlice.actions;
+
+export const selectAdvice = (state: RootState) => state.advice.value;
+export const selectAdviceId = (state: RootState) => state.advice.id;
+
+export default adviceSlice.reducer;
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Continued development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+I want to continue learning about Redux Toolkit and Next.js with Typescript. I think I need to improve my skills in these technologies.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Useful resources
 
-## Learn More
+- [Redux Toolkit with NextJS](https://redux.js.org/usage/nextjs) - This helped me to understand how to use Redux Toolkit with Next.js. I really liked this pattern and will use it going forward.
+- [Redux Typescript](https://redux.js.org/tutorials/typescript-quick-start) - This is an amazing article which helped me finally understand how to use Redux with Typescript. I'd recommend it to anyone still learning this concept.
 
-To learn more about Next.js, take a look at the following resources:
+## Author
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Website - [WebMinds Studio](https://www.webmindsstudio.com/)
+- Frontend Mentor - [@franclobo](https://www.frontendmentor.io/profile/franclobo)
+- Twitter - [@Pancho2788](https://twitter.com/Pancho2788)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Acknowledgments
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+I want to thank Frontend Mentor for this challenge. And anyone who helped me to understand Redux Toolkit and Next.js with Typescript.
